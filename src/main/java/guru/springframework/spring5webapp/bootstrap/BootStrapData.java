@@ -1,14 +1,70 @@
 package guru.springframework.spring5webapp.bootstrap;
 
+import guru.springframework.spring5webapp.domain.Author;
+import guru.springframework.spring5webapp.domain.Book;
+import guru.springframework.spring5webapp.domain.Publisher;
+import guru.springframework.spring5webapp.repositories.AuthorRepository;
+import guru.springframework.spring5webapp.repositories.BookRepository;
+import guru.springframework.spring5webapp.repositories.PublisherRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-// ComandLineRuner tells the Spring if find instances like this is to go ahead and run then
+// @Component is to tell is a annotation SpringFramwork to management component
+
+// ComandLineRuner tells the Springboot if find this is to run in,
+// Then takes a string of arguments and get those two properties here to initialize in those constructors
+// with the instances that they have. Having two objects saved inside and underneath the covers, JPA is using
+// Hibertnate to save those in memory H2 database
+
+
 @Component
 public class BootStrapData implements CommandLineRunner {
 
+    private final AuthorRepository authorRepository;
+    private final BookRepository bookRepository;
+    private final PublisherRepository publisherRepository;
+
+    public BootStrapData(AuthorRepository authorRepository, BookRepository bookRepository, PublisherRepository publisherRepository) {
+        this.authorRepository = authorRepository;
+        this.bookRepository = bookRepository;
+        this.publisherRepository = publisherRepository;
+
+//this make an injection of the dependencies in the constructor for n instance of Author and Book repository
+
+    }
+
     @Override
     public void run(String... args) throws Exception {
+
+        Author eric = new Author("Eric", "Evans");
+        Book ddd = new Book("Domain Driven Design", "123321");
+        Publisher live = new Publisher("Roman Library","Street 5", "underground wall", "New York", "NY", "13032-2323");
+        eric.getBooks().add(ddd);   // given a Book to an author
+        ddd.getAuthors().add(eric); //given a Author to a book
+        live.getPublisherAuthor().add(eric);
+        live.getPublisherBook().add(ddd);
+
+        // this will save these in database
+        authorRepository.save(eric);
+        bookRepository.save(ddd);
+        publisherRepository.save(live);
+
+        Author rob = new Author("Rob", "Jhonson");
+        Book noEJB = new Book("J2EE Development without JPE", "3456742342");
+        noEJB.getAuthors().add(rob);
+
+
+        // this will save these in database
+        authorRepository.save(rob);
+        bookRepository.save(noEJB);
+        
+        
+        
+
+        System.out.println("Started in Bootstrap");
+        System.out.println("Number of books: " + bookRepository.count());
+        System.out.println("Number of Publisher: " + publisherRepository.count());
+
 
     }
 }

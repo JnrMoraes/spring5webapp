@@ -7,12 +7,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Book {
+public class Book extends Author {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO) // throwns the responsability to autoincrement Id in database
     private Long id;
 
     private String name;
@@ -21,16 +24,17 @@ public class Book {
     @ManyToMany
     @JoinTable(name = "author_book"
             , joinColumns = @JoinColumn(name = "book_id")
-            , inverseJoinColumns = @JoinColumn(name = "author_id"))
-    private Set<Author> authors;
+            , inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+    private Set<Author> authors = new HashSet<>();
+
 
     public Book() {
     }
 
-    public Book(String name, String isbn, Set<Author> authors) {
+    public Book(String name, String isbn) {
         this.name = name;
         this.isbn = isbn;
-        this.authors = authors;
     }
 
     public String getName() {
