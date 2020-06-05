@@ -8,41 +8,62 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
-public class Book extends Author {
+public class Book {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) // throwns the responsability to autoincrement Id in database
     private Long id;
 
-    private String name;
+    private String title;
     private String isbn;
+
+    @ManyToOne
+    @JoinColumn(name = "publisher_id")
+
+    private Publisher publisher;
 
     @ManyToMany
     @JoinTable(name = "author_book"
             , joinColumns = @JoinColumn(name = "book_id")
-            , inverseJoinColumns = @JoinColumn(name = "author_id")
-    )
+            , inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors = new HashSet<>();
-
 
     public Book() {
     }
 
-    public Book(String name, String isbn) {
-        this.name = name;
+
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
+    }
+
+    public Book(String title, String isbn) {
+        this.title = title;
         this.isbn = isbn;
     }
 
-    public String getName() {
-        return name;
+    public Long getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getIsbn() {
@@ -65,7 +86,7 @@ public class Book extends Author {
     public String toString() {
         return "Book{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", title='" + title + '\'' +
                 ", isbn='" + isbn + '\'' +
                 ", authors=" + authors +
                 '}';
@@ -78,7 +99,7 @@ public class Book extends Author {
 
         Book book = (Book) o;
 
-        return id != null ? id.equals(book.id) : book.id == null;
+        return Objects.equals(id, book.id);
     }
 
     @Override

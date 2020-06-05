@@ -15,7 +15,7 @@ public class Author {
     @GeneratedValue(strategy = GenerationType.AUTO) // throwns the responsability to autoincrement Id in database
     private Long id;
 
-    private String name;
+    private String firstName;
     private String lastName;
 
     @ManyToMany(mappedBy = "authors")
@@ -24,10 +24,9 @@ public class Author {
     public Author() {
     }
 
-    public Author(String name, String lastName) {
-        this.name = name;
+    public Author(String firstName, String lastName) {
+        this.firstName = firstName;
         this.lastName = lastName;
-        this.books = books;
     }
 
     public Long getId() {
@@ -38,12 +37,12 @@ public class Author {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
@@ -66,7 +65,7 @@ public class Author {
     public String toString() {
         return "Author{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", books=" + books +
                 '}';
@@ -86,6 +85,4 @@ public class Author {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
-
-
 }
